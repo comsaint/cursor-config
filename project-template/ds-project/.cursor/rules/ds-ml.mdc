@@ -1,0 +1,22 @@
+---
+description: "ML training, evaluation, reproducibility rules"
+globs: ["**/train*.py", "**/model*.py", "**/evaluate*.py", "**/*lightgbm*", "**/*lgbm*"]
+---
+
+# 再現性（Reproducibility）
+- 所有隨機操作都必須設 random_state / seed，並集中定義為常數 RANDOM_SEED
+- 記錄 library 版本（lightgbm、sklearn、numpy）在 DECISION_LOG.md
+
+# 模型訓練
+- 訓練前必須先做 train/val/test split，不可 data leakage
+- 時序資料一律使用 TimeSeriesSplit 或手動 cutoff，禁止隨機 shuffle split
+- 所有 feature engineering 步驟只能 fit on train，再 transform val/test
+
+# 評估指標
+- 分類問題預設回報 precision、recall、F-beta、PR-AUC；不要只回報 accuracy
+- 迴歸問題預設回報 MAE、RMSE、MAPE；附上 baseline（naive forecast）比較
+- 評估結果附上 confidence interval 或 std（cross-validation）
+
+# 實驗追蹤
+- 每次實驗把超參數、指標、特徵清單追加到 STATUS.md
+- 模型儲存時一併存 feature list、threshold、訓練日期

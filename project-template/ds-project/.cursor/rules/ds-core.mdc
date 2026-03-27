@@ -1,0 +1,20 @@
+---
+description: "Python data science core style"
+alwaysApply: true
+---
+
+# Python 風格
+- 遵守 PEP 8；snake_case 命名變數和函數，UPPERCASE 命名常數
+- 所有函數必須有 type annotations 與 docstring（PEP 257）
+- 函數保持單一職責，不超過 40 行；超過請拆分
+- 優先用 vectorized 操作（numpy/pandas）取代 explicit loops
+- 禁止全域變數；所有參數明確傳入函數
+
+# 程式碼簡潔原則
+- 不要加不必要的抽象層（無謂的 base class、wrapper function）
+- 修改現有程式碼時，維持原有 pattern，不要順手重構周圍程式碼
+- 不要在未修改的函數上新增 type annotation 或 docstring
+
+# 錯誤處理
+- 在函數入口驗證 input 的 shape、dtype、null 比例
+- 提供具體錯誤訊息，包含實際收到的值和期望值

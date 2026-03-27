@@ -1,0 +1,19 @@
+---
+description: "Data loading, validation, and pipeline rules"
+globs: ["**/data*.py", "**/pipeline*.py", "**/etl*.py", "**/feature*.py"]
+---
+
+# 資料載入
+- 優先用 DuckDB 或 Parquet 處理大檔；避免把整個 DataFrame 存在記憶體
+- 讀取資料後立刻印出 shape、dtypes、null count、date range 供驗證
+- ClickHouse / MaxCompute query 加上 LIMIT 做初步探索，不要直接全表拉
+
+# 資料驗證
+- 每個 pipeline step 前後都要 assert schema（欄位名稱、dtype）
+- 時序資料必須檢查：時間連續性、重複 timestamp、未來資料洩漏
+- Null 超過 50% 的欄位自動標記，寫到 STATUS.md 等待確認再處理
+
+# 輸出格式
+- 中間結果儲存為 Parquet（不是 CSV），保留 dtype 資訊
+- 最終結果 CSV 每次都加上 generated_at timestamp 欄位
+- 不要 overwrite 現有輸出，改用 versioned filename（加日期）
