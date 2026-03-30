@@ -1,0 +1,19 @@
+{
+    "mcpServers": {
+      "github": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-github"],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "<ACCESS TOKEN HERE>"
+        }
+      },
+      "duckdb": {
+        "command": "<PATH TO UVX>/uvx.exe",
+        "args": [
+          "mcp-server-duckdb",
+          "--db-path",
+          "C:/<PATH TO DUCKDB>/local.duckdb"
+        ]
+      }
+    }
+  }
