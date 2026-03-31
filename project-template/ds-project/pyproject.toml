@@ -1,0 +1,84 @@
+[project]
+name = "your-project-name"
+version = "0.1.0"
+description = "Your project description"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [
+  ".git",
+  ".mypy_cache",
+  ".pytest_cache",
+  ".ruff_cache",
+  ".venv",
+  "build",
+  "dist",
+  "__pycache__",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP"]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["<改成實際套件路徑>"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+check_untyped_defs = true
+ignore_missing_imports = true
+exclude = [
+  "^build/",
+  "^dist/",
+  "^\\.venv/",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["<改成實際套件路徑>"]
+addopts = [
+  "--strict-markers",
+  "--strict-config",
+  "--cov=<改成實際套件路徑>",
+  "--cov-report=term-missing",
+  "--cov-report=html",
+]
+filterwarnings = [
+  "error",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["<改成實際套件路徑>"]
+omit = [
+  "tests/*",
+  "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+skip_empty = true
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == .__main__.:",
+  "raise NotImplementedError",
+  "pass",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
