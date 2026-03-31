@@ -1,4 +1,5 @@
 # cursor-config
+
 Cursor 設定倉庫，用來在不同機器之間同步我的 AI 開發習慣、資料科學專案模板、常用 commands、以及 MCP 設定。
 
 此 repo 的設計原則：
@@ -48,7 +49,6 @@ cursor-config/
         │       ├── parquet-dict.md
         │       └── parquet-map.md
         ├── .pre-commit-config.yaml
-        ├── configure_package.py
         ├── pyproject.toml
         ├── PLAN.md
         ├── STATUS.md
@@ -135,16 +135,6 @@ cd ~/work/my-ds-project
 git init
 ```
 
-設定**實際套件**（取代 `pyproject.toml` 裡的 `__DS_PACKAGE_IMPORT__` 與 `__DS_PYTHONPATH__`）：
-
-```bash
-# 常見 src layout：程式在 src/<套件名>/，pytest 需要把 src 加進 path
-python configure_package.py your_package_name
-
-# 扁平 layout：套件目錄在 repo 根目錄時
-python configure_package.py your_package_name --pythonpath .
-```
-
 安裝 hooks：
 
 ```bash
@@ -167,4 +157,151 @@ pre-commit install --hook-type pre-push
 
 本模板的預設策略：
 
-### Co
+### Commit 時跑
+- `ruff`
+- `mypy`
+
+### Push 時跑
+- `pytest-cov`
+
+### 手動跑
+- `mutmut`
+
+這樣可以避免每次小改動都跑完整測試，節省時間與 token，同時在 commit / push 前仍保留基本品質把關。
+
+---
+
+## Recommended usage pattern
+
+### 小改動
+直接修改，不需要啟動完整 cycle。
+
+適合：
+- 文案修正
+- 小 bug 修補
+- 一兩行邏輯微調
+- 註解或 docstring 補充
+
+### 中型改動
+可視情況使用：
+
+- `/review`
+- `/test-write`
+- `/test-fix`
+
+### 大改動 / 里程碑
+再使用完整：
+
+- `/cycle_code`
+
+### Parquet 分析任務
+手動使用：
+
+- `/parquet-dict`
+- `/parquet-map`
+
+這兩個 command 需要明確輸入 parquet 路徑，並依賴 DuckDB MCP。
+
+---
+
+## Project state files
+
+模板內建三個狀態檔：
+
+### `PLAN.md`
+記錄任務分解、里程碑與待辦。
+
+### `STATUS.md`
+每次修改後追加：
+- 改了哪些檔
+- 如何手動驗證
+- 下一步建議
+
+### `DECISION_LOG.md`
+記錄重要技術決策與理由，避免日後重複討論。
+
+---
+
+## MCP
+
+`global/mcp.json` 是 MCP 設定範本。
+
+使用前請先自行填入：
+
+- GitHub token
+- DuckDB 可執行檔路徑
+- DuckDB database path
+
+範例：
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
+      }
+    },
+    "duckdb": {
+      "command": "<PATH_TO_UVX>",
+      "args": [
+        "mcp-server-duckdb",
+        "--db-path",
+        "<PATH_TO_LOCAL_DUCKDB>"
+      ]
+    }
+  }
+}
+```
+
+請勿直接把真實 token 提交到 Git。
+
+---
+
+## Sync across machines
+
+在任一機器更新後：
+
+```bash
+cd ~/cursor-config
+git add .
+git commit -m "chore: update cursor config"
+git push
+```
+
+其他機器同步：
+
+```bash
+cd ~/cursor-config
+git pull
+bash bootstrap.sh
+```
+
+---
+
+## Notes
+
+- 全域 rules 應維持精簡，不要塞入大型工作流。
+- commands 是可選流程，不應在每次迭代自動執行。
+- `mutmut` 屬於高成本檢查，建議只在里程碑或重大改動前手動執行。
+- `doc/` 內模板應視實際專案填寫，不建議長期留白。
+
+---
+
+## Future improvements
+
+之後可考慮加入：
+
+- `make init` / `make quality` 快捷指令
+- `justfile` 或 `taskfile.yml`
+- `uv` / `poetry` / `pdm` 的專案初始化版本
+- CI 設定（GitHub Actions）
+- 不同類型模板（例如通用 Python、ETL、ML 訓練、分析 notebook 專案）
+
+---
+
+## License
+
+See `LICENSE`.
