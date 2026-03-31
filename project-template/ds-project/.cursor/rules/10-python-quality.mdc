@@ -1,0 +1,24 @@
+---
+description: Python quality tools usage and commands
+globs: ["**/*.py", "**/pyproject.toml", "**/.pre-commit-config.yaml"]
+alwaysApply: false
+---
+
+# Python Quality Toolchain
+
+## Tool Responsibilities
+- **ruff**: Linting + formatting (replaces flake8, black, isort)
+- **mypy**: Static type checking
+- **pytest-cov**: Test execution + coverage (threshold: 80%)
+- **mutmut**: Mutation testing (run only at milestones, very slow)
+
+## Commands Reference
+- `ruff check . --fix && ruff format .`  → lint and auto-fix
+- `mypy src/`                             → type check
+- `pytest --cov=src --cov-fail-under=80` → test with coverage
+- `mutmut run && mutmut results`         → mutation test (milestone only)
+
+## When AI Should Remind User to Run
+- Before creating a PR or pushing to main
+- After significant logic changes
+- Never automatically during iterative code generation

@@ -1,0 +1,11 @@
+---
+description: Base project standards
+alwaysApply: true
+---
+
+# Project Standards
+- All Python code must include type hints
+- Never remove existing type hints or docstrings
+- Use snake_case for functions, PascalCase for classes
+- Quality tools (ruff, mypy, pytest, mutmut) are enforced via pre-commit — do NOT run them during coding iterations
+- Remind user to run quality checks only before git push, not during AI-assisted development
