@@ -18,6 +18,11 @@ TARGET_FILES = ("pyproject.toml",)
 
 
 def _validate_identifiers(package: str, pythonpath_rel: str) -> None:
+    """Ensure CLI values are safe to substitute and non-empty.
+
+    Exits the process with an error message if values still contain template
+    tokens or are blank after stripping.
+    """
     if TOKEN_IMPORT in package or TOKEN_PYTHONPATH in pythonpath_rel:
         raise SystemExit("Refusing to use values that still contain template tokens.")
     if not package.strip():
