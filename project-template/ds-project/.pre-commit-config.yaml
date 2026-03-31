@@ -41,7 +41,8 @@ repos:
     hooks:
       - id: pytest-cov
         name: pytest with coverage
-        entry: pytest --cov=<改成實際套件路徑> --cov-fail-under=80 -q
+        # Coverage options come from pyproject.toml (incl. --cov, fail_under).
+        entry: pytest -q
         language: system
         pass_filenames: false
         stages: [pre-push]

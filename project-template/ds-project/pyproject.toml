@@ -24,7 +24,8 @@ select = ["E", "F", "B", "I", "UP"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["<改成實際套件路徑>"]
+# Top-level import name; run: python configure_package.py <name> [--pythonpath <dir>]
+known-first-party = ["__DS_PACKAGE_IMPORT__"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -49,11 +50,12 @@ exclude = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["<改成實際套件路徑>"]
+# Relative path added for imports (e.g. src or .)
+pythonpath = ["__DS_PYTHONPATH__"]
 addopts = [
   "--strict-markers",
   "--strict-config",
-  "--cov=<改成實際套件路徑>",
+  "--cov=__DS_PACKAGE_IMPORT__",
   "--cov-report=term-missing",
   "--cov-report=html",
 ]
@@ -63,7 +65,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 branch = true
-source = ["<改成實際套件路徑>"]
+source = ["__DS_PACKAGE_IMPORT__"]
 omit = [
   "tests/*",
   "*/__pycache__/*",

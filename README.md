@@ -48,6 +48,7 @@ cursor-config/
         │       ├── parquet-dict.md
         │       └── parquet-map.md
         ├── .pre-commit-config.yaml
+        ├── configure_package.py
         ├── pyproject.toml
         ├── PLAN.md
         ├── STATUS.md
@@ -132,6 +133,16 @@ bash bootstrap.sh
 cp -r ~/cursor-config/project-template/ds-project ~/work/my-ds-project
 cd ~/work/my-ds-project
 git init
+```
+
+設定**實際套件**（取代 `pyproject.toml` 裡的 `__DS_PACKAGE_IMPORT__` 與 `__DS_PYTHONPATH__`）：
+
+```bash
+# 常見 src layout：程式在 src/<套件名>/，pytest 需要把 src 加進 path
+python configure_package.py your_package_name
+
+# 扁平 layout：套件目錄在 repo 根目錄時
+python configure_package.py your_package_name --pythonpath .
 ```
 
 安裝 hooks：
